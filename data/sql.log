@@ -1,0 +1,1 @@
+[xorm] [info]  2017/04/01 23:41:29.000793 [sql] SELECT `userid`, `nickname`, `sex`, `phone`, `photo`, `status`, `coin`, `diamond`, `room_card`, `vip`, `vip_expire`, `wxuid`, `win`, `lost`, `ping`, `piao`, `robot`, `utime` FROM `user` WHERE `userid` = ? LIMIT 1 [args] [1111]
