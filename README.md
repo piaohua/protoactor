@@ -1,8 +1,7 @@
 # protoactor
 
-    This sample is a game server based on protoactor-go
-
-    Forked from https://github.com/AsynkronIT/protoactor-go
+This sample is a game server based on protoactor-go</br>
+Forked from (https://github.com/AsynkronIT/protoactor-go)</br>
 
 ## Installation
 
