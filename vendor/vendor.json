@@ -1,0 +1,26 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "oxWdStqmvbu7mOHNM0YQS9XdSzI=",
+			"path": "github.com/AsynkronIT/goconsole",
+			"revision": "bfa12eebf7161a928e20d11a627cc689e99e2e50",
+			"revisionTime": "2016-05-04T19:26:49Z"
+		},
+		{
+			"checksumSHA1": "Ge9f4cJaLow76G6Ry/fSq1zV+j8=",
+			"path": "github.com/AsynkronIT/gonet",
+			"revision": "0553637be2257d123c1c1877d1f3bbd23adce41d",
+			"revisionTime": "2016-11-27T09:19:28Z"
+		},
+		{
+			"checksumSHA1": "tMNIzVn4PO4TLLdhqNVFRqrp74I=",
+			"path": "github.com/AsynkronIT/protoactor-go",
+			"revision": "ffac44f5585e6c1d1c6dc2f6b0ce727cb6e3d12b",
+			"revisionTime": "2017-02-26T18:30:39Z",
+			"tree": true
+		}
+	],
+	"rootPath": "protoactor"
+}
