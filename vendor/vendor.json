@@ -15,10 +15,11 @@
 			"revisionTime": "2016-11-27T09:19:28Z"
 		},
 		{
-			"checksumSHA1": "d/ucORQh89wzPvufpZVKMt7KBB0=",
-			"path": "github.com/AsynkronIT/protoactor-go/remote",
+			"checksumSHA1": "tMNIzVn4PO4TLLdhqNVFRqrp74I=",
+			"path": "github.com/AsynkronIT/protoactor-go",
 			"revision": "ffac44f5585e6c1d1c6dc2f6b0ce727cb6e3d12b",
-			"revisionTime": "2017-02-26T18:30:39Z"
+			"revisionTime": "2017-02-26T18:30:39Z",
+			"tree": true
 		}
 	],
 	"rootPath": "protoactor"
