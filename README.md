@@ -17,3 +17,9 @@ go build -o robots -ldflags "-w -s" ../src/protoactor/robots.go
 ./main -log_dir="log" > /dev/null 2>&1 &
 ./robots -log_dir="log" > /dev/null 2>&1 &
 ```
+
+## Note:
+
+    As protoactor is not actively maintained please use one of the following instead
+    [goplays](https://github.com/piaohua/goplays)
+    [gohappy](https://github.com/piaohua/gohappy)
