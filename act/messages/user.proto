@@ -1,0 +1,30 @@
+syntax = "proto3";
+package messages;
+import "vo.proto";
+
+// 获取游戏全局配置数据
+message CConfig
+{
+    uint32 code = 1;//协议号
+}
+
+message SConfig
+{
+    uint32 code     = 1;//协议号
+    string imageurl = 2;  // 玩家头像图片服务器地址和端口
+    string version  = 3;  // 版本号
+}
+
+// 获取玩家的数据
+message CUserData
+{
+	uint32 code   = 1 ;//协议号
+	string userid = 2;//用户id
+}
+
+message SUserData
+{
+	uint32 code   = 1 ;//协议号
+	UserData data = 2;
+	uint32 error  = 3;  // 错误码
+}

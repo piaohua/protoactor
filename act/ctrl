@@ -1,0 +1,187 @@
+#!/bin/bash
+
+usage() {
+    echo " ./ctrl cmd "
+    echo " cmd : build, build-admin, run, run-admin "
+    echo " cmd : show, sync, kill, run-server, stop "
+    echo " cmd : show-admin, stop-admin run-admin "
+    echo " cmd : show-robot, stop-robot run-robot "
+}
+
+proto() {
+    CURDIR=$(cd ../"$(dirname "$0")"; pwd)
+    OLDGOPATH="$GOPATH"
+    export GOPATH="$CURDIR"
+    cd ./messages
+    MSGDIR=../../src/protoactor/messages
+    #protoc --go_out=$MSGDIR,import_path=$MSGDIR:$MSGDIR login.proto
+    protoc -I=. -I=${GOPATH}/src --gogoslick_out=plugins=grpc:${MSGDIR} *.proto
+    export GOPATH="$OLDGOPATH"
+}
+
+protos() {
+    CURDIR=$(cd ../"$(dirname "$0")"; pwd)
+    OLDGOPATH="$GOPATH"
+    export GOPATH="$CURDIR"
+    cd ./messages
+    MSGDIR=../../src/protoactor/messages
+    protoc -I=. -I=${GOPATH}/src --gogoslick_out=plugins=grpc:${MSGDIR} protos.proto
+    export GOPATH="$OLDGOPATH"
+}
+
+build() {
+    GOPATHOLD=$GOPATH
+    GOPATH=$(cd ../"$(dirname "$0")"; pwd)
+    go build -o main -ldflags "-w -s" ../src/protoactor/main.go
+    GOPATH=$GOPATHOLD
+}
+
+build_robot() {
+    GOPATHOLD=$GOPATH
+    GOPATH=$(cd ../"$(dirname "$0")"; pwd)
+    go build -o robot -ldflags "-w -s" ../src/protoactor/robots.go
+    GOPATH=$GOPATHOLD
+}
+
+build_linux() {
+    GOPATHOLD=$GOPATH
+    GOARCH_OLD=$GOARCH
+    GOOS_OLD=$GOOS
+    CGO_ENABLED_OLD=$CGO_ENABLED
+    export CGO_ENABLED=0
+    export GOOS=linux
+    export GOARCH=amd64
+    GOPATH=$(cd ../"$(dirname "$0")"; pwd)
+    go build -o main -ldflags "-w -s" ../src/protoactor/main.go
+    GOPATH=$GOPATHOLD
+    export GOARCH=$GOARCH_OLD
+    export GOOS=$GOOS_OLD
+    export CGO_ENABLED=$CGO_ENABLED_OLD
+}
+
+build_linux_robot() {
+    GOPATHOLD=$GOPATH
+    GOARCH_OLD=$GOARCH
+    GOOS_OLD=$GOOS
+    CGO_ENABLED_OLD=$CGO_ENABLED
+    export CGO_ENABLED=0
+    export GOOS=linux
+    export GOARCH=amd64
+    GOPATH=$(cd ../"$(dirname "$0")"; pwd)
+    go build -o robot -ldflags "-w -s" ../src/protoactor/robots.go
+    GOPATH=$GOPATHOLD
+    export GOARCH=$GOARCH_OLD
+    export GOOS=$GOOS_OLD
+    export CGO_ENABLED=$CGO_ENABLED_OLD
+}
+
+start() {
+    PID=`get_pid`
+    if [ "$PID" != '' ]; then
+        echo "server already runing PID : $PID"
+    else
+        ./main -log_dir="log" > error.log 2>&1 &
+        sleep 3s
+        PID=`get_pid`
+        echo "runing server PID : $PID"
+    fi
+}
+
+start_robot() {
+    PID=`get_pid_robot`
+    if [ "$PID" != '' ]; then
+        echo "robot server already runing PID : $PID"
+    else
+        ./robot -log_dir="log" > error-robot.log 2>&1 &
+        sleep 3s
+        PID=`get_pid_robot`
+        echo "runing robot server PID : $PID"
+    fi
+}
+
+show() {
+    ps aux | grep -v grep | grep './main -log_dir=log'
+}
+
+get_pid() {
+    ps aux | grep -v grep | grep './main -log_dir=log' | awk '{print $2}'
+}
+
+show_robot() {
+    ps aux | grep -v grep | grep './robot -log_dir=log'
+}
+
+get_pid_robot() {
+    ps aux | grep -v grep | grep './robot -log_dir=log' | awk '{print $2}'
+}
+
+stop() {
+    PID=`get_pid`
+    if [ "$PID" != '' ]; then
+        kill -2 $PID
+        sleep 3s
+        echo "$PID killed!"
+        return 1
+    else
+        echo "stopped"
+        return 1
+    fi
+}
+
+stop_robot() {
+    PID=`get_pid_robot`
+    if [ "$PID" != '' ]; then
+        kill -2 $PID
+        sleep 3s
+        echo "$PID killed!"
+        return 1
+    else
+        echo "stopped"
+        return 1
+    fi
+}
+
+restart() {
+    stop
+    sleep 3s
+    start
+}
+
+restart_robot() {
+    stop_robot
+    sleep 3s
+    start_robot
+}
+
+case $1 in
+    build)
+        build;;
+    build-robot)
+        build_robot;;
+    build-linux)
+        build_linux;;
+    build-robot-linux)
+        build_linux_robot;;
+    start)
+        start;;
+    show)
+        show;;
+    stop)
+        stop;;
+    restart)
+        restart;;
+    start-robot)
+        start_robot;;
+    show-robot)
+        show_robot;;
+    stop-robot)
+        stop_robot;;
+    restart-robot)
+        restart_robot;;
+    proto)
+        proto;;
+    protos)
+        protos;;
+    *)
+        usage;;
+esac

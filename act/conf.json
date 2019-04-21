@@ -1,0 +1,24 @@
+{
+	"discard_timeout":12,
+	"operate_timeout":10,
+
+	"image_dir":"./image",
+	"image_port":8013,
+	"feedback_image_dir":"./feedback",
+	"feedback_image_port":8014,
+
+	"db_addr":"127.0.0.1:2225",
+	"server_host":"127.0.0.1",
+	"server_port":7011,
+	"web_port":8017,
+	"pay_port":0,
+	"pay_wx_pattern":"/mahjong/wxpay/notice",
+	"pay_iapp_pattern":"/mahjong/iapppay/notice",
+	"share_addr":"http://www.xxx.com/share/index.htm",
+
+    "server_node":"127.0.0.1:7070",
+    "robots_node":"127.0.0.1:7072",
+
+	"server_id":1,
+	"version":"1.0.1"
+}

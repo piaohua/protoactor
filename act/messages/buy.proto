@@ -1,0 +1,61 @@
+syntax = "proto3";
+package messages;
+
+// 商城
+message CBuy
+{
+    uint32 code = 1 ;//协议号
+    uint32 id   = 2; // 购买ID
+}
+
+message SBuy
+{
+    uint32 code   = 1 ;//协议号
+    uint32 result = 2;  // 0购买成功,1失败
+    uint32 error  = 3 ; // 错误码
+}
+
+// 微信支付 - 下单
+message CWxpayOrder
+{
+    uint32 code = 1 ;//协议号
+    uint32 id   = 2; // 购买商品ID
+    string body = 3; // 购买商品描述
+}
+
+message SWxpayOrder
+{
+    uint32 code    = 1 ;//协议号
+    uint32 id      = 2;  // 购买商品ID
+    string payreq  = 3;  // 调起支付接口请求参数
+    string orderid = 4;  // 订单号
+    uint32 error   = 5 ; // 错误码
+}
+
+// 微信支付 - 查询
+message CWxpayQuery
+{
+    uint32 code     = 1 ;//协议号
+    string transid  = 2;  // 微信订单号
+}
+
+message SWxpayQuery
+{
+    uint32 code    = 1 ;//协议号
+    string orderid = 2;  // 订单号
+    uint32 result  = 3;  // 0支付成功,1发货中,2订单号不存在,3支付失败
+    uint32 error   = 4 ; // 错误码
+}
+
+// 绑定代理id
+message CBuildAgent
+{
+	uint32 code = 1;//协议号
+	string agent= 2;//代理ID
+}
+
+message SBuildAgent
+{
+	uint32 code   = 1;//协议号
+	uint32 result = 2;//0成功,1不能绑定自己,2已经绑定,3不合格id,4不能绑定下级自己,5代理商不存在
+}

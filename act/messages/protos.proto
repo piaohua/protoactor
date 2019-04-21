@@ -1,0 +1,189 @@
+syntax = "proto3";
+package messages;
+import "github.com/AsynkronIT/protoactor-go/actor/protos.proto";
+
+message Login {
+    string Userid    = 1;
+    string Phone     = 2;
+    string Nickname  = 3;
+    actor.PID Sender = 4;
+}
+
+message Logined {
+    actor.PID Sender = 1;
+}
+
+message RepeatLogin {
+    actor.PID Sender = 1;
+    actor.PID Repeat = 2;
+}
+
+message Logout {
+    actor.PID Sender = 1;
+}
+
+message Request {
+    string UserName = 1;
+    string Message = 2;
+}
+
+message Response {
+    string UserName = 1;
+    string Message = 2;
+}
+
+//登录
+message OnlineReq {
+	actor.PID Pid = 1;     //玩家进程ID
+	actor.PID Sender = 2;  //玩家消息进程ID
+    string Userid    = 3;
+    string Phone     = 4;
+    string Nickname  = 5;
+}
+
+message OnlineResp {
+    bool Result    = 1;   //是否在线
+    actor.PID Sender = 2; //玩家消息进程ID
+    string Userid    = 3;
+    string Phone     = 4;
+    string Nickname  = 5;
+}
+
+//进入房间请求
+message EnterRoomReq {
+    string    Userid   = 1; //玩家ID
+    string    Nickname = 2; //玩家昵称
+    uint32    Sex      = 3; //玩家性别
+    string    Photo    = 4; //玩家头像地址
+    uint32    Diamond  = 5; //玩家钻石数量
+    string    Code     = 6; //邀请码
+    actor.PID Pid      = 7; //玩家进程ID
+}
+
+//响应进入房间
+message EnterRoomResp {
+    bool      Result   = 1; //邀请码
+    actor.PID Pid      = 2; //玩家进程ID
+}
+
+//创建房间请求
+message CreateRoomReq {
+    string    Userid   = 1; //玩家ID
+    string    Nickname = 2; //玩家昵称
+    uint32    Sex      = 3; //玩家性别
+    string    Photo    = 4; //玩家头像地址
+    uint32    Diamond  = 5; //玩家钻石数量
+	uint32    Rtype    = 6; //房间类型
+	string    Rname    = 7; //房间名字
+	uint32    Ante     = 8; //房间底分
+	uint32    Round    = 9; //房间局数
+	uint32    Payment  =10; //付费方式
+	uint32    Pao      =11; //大牌玩法
+	uint32    Count    =12; //房间人数
+    actor.PID Pid      =13; //玩家进程ID
+}
+
+//响应创建房间
+message CreateRoomResp {
+    bool      Result   = 1; //创建成功或失败
+    actor.PID Pid      = 2; //玩家进程ID
+}
+
+//房间准备请求
+message ReadyRoomReq {
+    string    Userid   = 1; //玩家ID
+    bool      Ready    = 2; //准备状态
+    actor.PID Pid      = 3; //玩家进程ID
+}
+
+//第一次进入房间
+message EnterDeskReq {
+    string    Userid   = 1; //玩家ID
+    bool      Result   = 2; //进入成功或失败
+    actor.PID Pid      = 3; //玩家进程ID
+}
+
+//离开房间
+message LeaveRoomReq {
+    string    Userid   = 1; //玩家ID
+    actor.PID Pid      = 2; //玩家进程ID
+}
+
+//打牌 
+message DiscardReq {
+    string    Userid   = 1; //玩家ID
+    uint32    Card     = 2; //打的牌
+    bool      State    = 3; //是否为超时操作
+    actor.PID Pid      = 4; //玩家进程ID
+}
+
+//胡碰杠操作 
+message OperateReq {
+    string    Userid   = 1; //玩家ID
+    uint32    Card     = 2; //操作的牌
+    uint32    Value    = 3; //操作值
+    actor.PID Pid      = 4; //玩家进程ID
+}
+
+//超时打牌
+message TimerDiscardReq {
+    string    Userid  = 1; //操作玩家
+    uint32    Card    = 2; //操作的牌
+}
+
+//超时操作
+message TimerTurnReq {
+    uint32    Seat    = 1; //操作位置
+}
+
+//房间关闭,离开房间
+message LeaveDesk {
+    uint32    Seat    = 1; //操作位置
+}
+
+//房间关闭
+message DeskClose {
+    string    Code    = 1; //邀请码
+}
+
+//机器人消息
+message RobotMsg {
+    string Code    = 1;
+    uint32 Num     = 2;
+}
+
+//注册消息
+message LogRegist {
+    string Userid    = 1;
+    string Name      = 2;
+    string Nickname  = 3;
+    string Ip        = 4;
+    actor.PID Sender = 5; //日志进程
+}
+
+//登录消息
+message LogLogin {
+    string Userid    = 1;
+    uint32 Event     = 2;
+    string Ip        = 3;
+    actor.PID Sender = 4; //日志进程
+}
+
+//登出消息
+message LogLogout {
+    string Userid    = 1;
+    uint32 Event     = 2;
+    string Ip        = 3;
+    actor.PID Sender = 4; //日志进程
+}
+
+//牌局结算
+message UpdateUser {
+    string Userid  = 1; //玩家ID
+    uint32 Coin    = 2; //玩家金币
+    uint32 Diamond = 3; //玩家钻石数量
+    uint32 Win     = 4; //赢
+    uint32 Lost    = 5; //输
+    uint32 Ping    = 6; //荒
+    uint32 Piao    = 7; //飘
+}

@@ -1,0 +1,170 @@
+syntax = "proto3";
+package messages;
+import "vo.proto";
+
+// 进入房间,断线重连
+message CEnterRoom
+{
+    uint32 code      = 1 ;//协议号
+    string invitecode= 2; //房间邀请码,每个私人局房间都有一个唯一的邀请码
+}
+
+message SEnterRoom
+{
+    uint32    code     = 1 ;//协议号
+    RoomData  roominfo = 2;//房间信息
+    repeated RoomUser  userinfo = 3;//房间内玩家信息
+    repeated RoomCards cardinfo = 4;//玩家牌面数据
+    RoomVote  voteinfo = 5;//投票中时的投票数据
+    uint32    error    = 6 ; // 错误码
+}
+
+// 离开房间
+message CLeave
+{
+    uint32 code = 1 ;//协议号
+}
+message SLeave
+{
+    uint32 code = 1 ;//协议号
+    uint32 seat = 2; //玩家选择的座位号
+    uint32 error= 3 ; // 错误码
+}
+
+// 准备游戏
+message CReady
+{
+    uint32 code  = 1 ;//协议号
+    bool   ready = 2; //true准备,false取消
+}
+message SReady
+{
+    uint32 code = 1 ;//协议号
+    uint32 seat = 2; //准备游戏的玩家座位
+    bool   ready= 3; //true准备,false取消
+    uint32 error= 4 ; // 错误码
+}
+
+// 创建房间
+message CCreateRoom
+{
+    uint32 code    = 1 ;//协议号
+    string rname   = 2;  //房间名字
+    uint32 rtype   = 3;  //房间类型,里面定义低注等
+    uint32 ante    = 4;  //底分
+    uint32 round   = 5;  //牌局数
+    uint32 payment = 6;  //付费方式0=房主付费,1=AA付费
+    uint32 pao     = 7;  //1=大牌玩法,0=不能炮胡
+    uint32 count   = 8;  //房间人数(2,4)
+}
+// 返回房间数据,
+message SCreateRoom
+{
+    uint32 code    = 1 ;//协议号
+    RoomData rdata = 2; //房间数据
+    uint32 error   = 3 ; // 错误码
+}
+
+// 踢人
+message CKick
+{
+    uint32 code = 1 ;//协议号
+    uint32 seat = 2; //被踢的玩家座位
+}
+message SKick
+{
+    uint32 code   = 1 ;//协议号
+    uint32 seat   = 2; //被踢的玩家座位
+    uint32 userid = 3; //被踢的玩家id
+    uint32 result = 4; //0失败,1房主T人,2房间被解散
+    uint32 error  = 5 ; // 错误码
+}
+
+// 其他玩家进入房间
+message SCamein
+{
+    uint32   code    = 1 ;//协议号
+    RoomUser userinfo= 2;// 玩家的信息
+}
+
+//开始游戏,打骰,选庄,选赖,发牌,包含两个骰子数字
+message SGamestart
+{
+    uint32 code  = 1 ;//协议号
+    uint32 dice  = 2;  //1-6的骰子数,如63表示6,3
+    uint32 dealer= 3;  //庄家位置
+    uint32 laipi = 4;  //赖皮牌值
+    uint32 laizi = 5;  //赖子牌值
+    repeated uint32 cards = 6;  //手牌13张,庄家14张
+    uint32 value = 7;  //是否杠胡,掩码,庄家操作提示
+}
+
+//抓牌
+message SDraw
+{
+    uint32 code = 1 ;//协议号
+    uint32 seat = 2;  //摸牌玩家的座位号(1-4)
+    uint32 card = 3;  //所摸的牌,不是自己时为空
+    uint32 value= 4;  //掩码
+    uint32 kong = 5;  //1:杠后摸牌0:普通摸牌
+}
+
+// 出牌
+message CDiscard
+{
+    uint32 code = 1 ;//协议号
+    uint32 card = 2;  //牌值
+}
+
+//玩家出牌广播
+message SDiscard
+{
+    uint32 code = 1 ;//协议号
+    uint32 seat = 2;  //出牌玩家的座位号(1-4)
+    uint32 card = 3;  //牌值
+    uint32 value= 4;  //碰杠胡掩码
+    uint32 error= 5 ; // 错误码
+}
+
+// 玩家碰杠操作
+message COperate
+{
+    uint32 code = 1 ;//协议号
+    uint32 card = 2;  //牌值
+    uint32 value= 3;  //提交碰杠相应的单个掩码值
+}
+
+// 碰杠广播 ,胡牌不在这个接口返回
+message SOperate
+{
+    uint32 code       = 1 ;//协议号
+    uint32 seat       = 2;  // 碰牌和杠牌玩家的座位号
+    uint32 beseat     = 3;  // 被碰杠胡的玩家座位号
+    uint32 card       = 4;  // 被碰或杠牌的牌值
+    uint32 value      = 5;  // 碰或值杠,掩码
+    uint32 discontinue= 6;  // 抢杠
+    uint32 error      = 7 ; // 错误码
+}
+
+// 处理前面有玩家胡牌优先操作,如果该玩家跳过胡牌,此协议向有碰和明杠的玩家主动发送
+message SPengKong
+{
+    uint32 code = 1 ;//协议号
+    uint32 seat = 2;  // 出牌玩家的座位号(1-4)
+    uint32 card = 3;  // 牌值
+    uint32 value= 4;  // 碰杠胡,掩码表示
+}
+
+// 结算广播接口，游戏结束
+message SGameover
+{
+    uint32   code   = 1 ;//协议号
+    uint32   roomid = 2;//牌局id
+    uint32   round  = 3;//剩余牌局数
+    uint32   expire = 4;//牌局设定的时间（牌局存在的时间）
+    uint32   huType = 5;//0:黄庄，1:自摸，2:炮胡
+    uint32   paoSeat= 6;//放炮玩家座位号
+	uint32   seat   = 7;//胡牌玩家座位号
+	uint32   card   = 8;//胡牌的牌值(玩家胡的是哪张牌)
+    repeated RoomOver data   = 9;//结算数据
+}

@@ -1,0 +1,97 @@
+syntax = "proto3";
+package messages;
+
+// 玩家的详细数据
+message UserData
+{
+	string userid    =1;//用户账号
+	string nickname  =2;//昵称
+	string phone     =3;//电话号码
+	uint32 sex       =4;//用户性别,男1 女0
+	uint32 status    =5;//屏蔽状态(正常0 锁定1 黑名单2)
+	string photo     =6;//头像
+	uint32 coin      =8;//金币
+	uint32 diamond   =9;//钻石
+	uint32 win       =10;//输的局数
+	uint32 lost      =11;//赢的局数
+	uint32 ping      =12;//平局数
+	uint32 piao      =13;//飘赖子次数
+	uint32 roomtype  =14;//所在房间类型id
+	uint32 roomid    =15;//所在房间id
+	string invitecode=16;//所在房间邀请码
+}
+
+// 玩家在房间内的基础数据
+message RoomUser
+{
+	string userid   =1;//用户账号
+	string nickname =2;//昵称
+	uint32 seat     =3;//座位号
+	uint32 sex      =4;//用户性别,男1 女0
+	string photo    =5;//头像
+	uint32 coin     =7;//金币
+	uint32 diamond  =8;//钻石
+	bool   ready    =9;//玩家de准备状态
+	uint32 win      =10;//输的局数
+	uint32 lost     =11;//赢的局数
+	uint32 ping     =12;//平局数
+	uint32 piao     =13;//飘赖子次数
+    int32  score    =14;//当前积分
+    uint32 value    =15;//碰杠胡掩码(重连进入房间时)
+    repeated uint32 handcards  =16;//玩家手牌
+}
+
+// 房间数据
+message RoomData
+{
+	uint32 roomid    = 1;  //牌局id
+	uint32 rtype     = 2;  //room type
+	string rname     = 3;  //room name
+	uint32 expire    = 4;  //牌局设定的时间(牌局存在的时间)
+	uint32 count     = 5;  //房间限制数量
+	string invitecode= 6;  //房间邀请码
+	uint32 dealer    = 7;  //庄家位置
+	uint32 round     = 8;  //剩余牌局数
+	string userid    = 9;  //房主ID
+    bool   state     =10;  //房间状态
+    uint32 cards     =11;  //剩余未摸起的牌数
+    uint32 dice      =12;  //1-6的骰子数
+    uint32 turn      =13;  //当前打牌玩家
+    uint32 laipi     =14;  //赖皮牌值
+    uint32 laizi     =15;  //赖子牌值
+}
+
+// 房间桌面牌数据(重复进入房间时数据)
+message RoomCards
+{
+	uint32 seat    =1;//玩家的座位
+	repeated uint32 peng    =2;//最高字节为被碰牌玩家座位号，第二字节为碰牌值
+	repeated uint32 kong    =3;//最高字节为放杠玩家的座位(1-4),非明杠则为0,第二字节为杠牌值,第三个字节为杠类型（暗杠／明杠／补杠）最低字节保留
+	repeated uint32 outcards=4;//每个玩家跟前的海底牌
+}
+
+// 结算数据
+message RoomOver
+{
+    uint32 seat      =1;  //玩家座位号
+    string userid    =2;  //用户id
+    repeated uint32 cards     =3;  //玩家手牌
+    uint32 hu        =4;  //胡牌类型,掩码值,为0时不胡牌
+    int32  huTypeFan =5;  //胡牌方式番数(比如:热炮,杠上开花,杀报等等方式胡牌时额外的番数)
+    int32  huFan     =6;  //胡牌牌型番数(仅针对胡牌牌型的番数)
+    int32  mingKong  =7;  //明杠的番数
+    int32  beMingKong=8;  //被杠的负番数
+    int32  anKong    =9;  //暗杠的番数
+    int32  buKong    =10; //补杠的番数
+    int32  total     =11; //总番数,总番=胡牌牌型番值*马的番值
+    int32  coin      =12; //输赢金币数量
+    int32  score     =13; //当前积分
+}
+
+// 投票信息
+message RoomVote
+{
+    uint32 seat    =1;//发起投票的玩家座位号
+    repeated uint32 agree   =2;//同意
+    repeated uint32 disagree=3;//不同意
+}

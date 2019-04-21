@@ -1,0 +1,49 @@
+syntax = "proto3";
+package messages;
+
+// 登陆
+message CLogin
+{
+    uint32 code     = 1;//协议号
+    string phone    = 2;// 如果已经有userid不会再验证手机
+    string password = 3;// 密码 (MD5)
+}
+
+message SLogin
+{
+    uint32 code     = 1 ;//协议号
+    string userid   = 2 ;// 用户id
+    uint32 error    = 3 ; // 错误码
+}
+
+// 注册
+message CRegist
+{
+    uint32 code     = 1 ;//协议号
+    string nickname = 2;//昵称
+    string phone    = 3;//手机号
+    string password = 4;//密码(md5)
+}
+
+message SRegist
+{
+    uint32 code   = 1 ;//协议号
+    string userid = 2 ;// 用户id
+    uint32 error  = 3 ; // 错误码
+}
+
+// 微信登录登陆
+message CWxLogin
+{
+    uint32 code    = 1;//协议号
+    string wxcode  = 2; //微信code
+    string token   = 3; //token登录
+}
+
+message SWxLogin
+{
+    uint32 code    = 1 ;//协议号
+    string userid  = 2 ;// 用户id
+    string token   = 3 ;// 返回access_token
+    uint32 error   = 4 ; // 错误码
+}

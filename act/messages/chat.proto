@@ -1,0 +1,34 @@
+syntax = "proto3";
+package messages;
+
+// 房间广播文字聊天
+message CChatText
+{
+    uint32 code    = 1 ;//协议号
+    string content = 2;
+}
+
+// 广播文字聊天
+message SChatText
+{
+    uint32 code    = 1 ;//协议号
+    uint32 seat    = 2;
+    string content = 3;
+    uint32 error   = 4 ; // 错误码
+}
+
+// 房间广播语音聊天
+message CChatVoice
+{
+    uint32 code    = 1 ;//协议号
+    string content = 2;
+}
+
+// 广播语音聊天
+message SChatVoice
+{
+    uint32 code    = 1 ;//协议号
+    uint32 seat    = 2;
+    string content = 3;
+    uint32 error   = 4 ; // 错误码
+}
